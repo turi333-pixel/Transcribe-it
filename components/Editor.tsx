@@ -34,22 +34,22 @@ export const Editor: React.FC<EditorProps> = ({ item, onSave, onTitleChange, isP
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col min-h-[600px] h-full">
-      <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full overflow-hidden">
+      <div className="p-4 md:p-6 border-b border-slate-100 flex items-center justify-between gap-2">
         <input 
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
             onTitleChange(e.target.value);
           }}
-          placeholder="Enter document title..."
-          className="text-2xl font-bold text-slate-900 border-none focus:ring-0 w-full bg-transparent"
+          placeholder="Document title..."
+          className="text-lg md:text-2xl font-bold text-slate-900 border-none focus:ring-0 w-full bg-transparent p-0"
         />
-        <div className="flex gap-2 ml-4">
+        <div className="flex gap-1 md:gap-2 shrink-0">
           <button 
             onClick={handleCopy}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-            title="Copy to clipboard"
+            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            title="Copy"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -57,8 +57,8 @@ export const Editor: React.FC<EditorProps> = ({ item, onSave, onTitleChange, isP
           </button>
           <button 
             onClick={handleDownload}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-            title="Export as .txt"
+            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            title="Export"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -67,35 +67,35 @@ export const Editor: React.FC<EditorProps> = ({ item, onSave, onTitleChange, isP
         </div>
       </div>
       
-      <div className="flex-1 p-8 relative">
+      <div className="flex-1 p-4 md:p-8 relative overflow-hidden flex flex-col">
         <textarea
           value={content}
           onChange={(e) => {
             setContent(e.target.value);
             onSave(e.target.value);
           }}
-          placeholder="Transcription content appears here..."
-          className="w-full h-full resize-none border-none focus:ring-0 text-slate-700 leading-relaxed text-lg"
+          placeholder="Transcription content..."
+          className="flex-1 w-full resize-none border-none focus:ring-0 text-slate-700 leading-relaxed text-sm md:text-lg bg-transparent"
           spellCheck={false}
         />
         
         {isProcessing && (
-          <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center rounded-b-2xl">
-            <div className="bg-white px-6 py-4 rounded-xl shadow-lg border border-slate-100 flex items-center gap-4">
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center rounded-b-2xl z-10">
+            <div className="bg-white px-6 py-4 rounded-xl shadow-lg border border-slate-100 flex items-center gap-4 animate-in fade-in zoom-in duration-300">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-              <span className="font-semibold text-slate-700">Updating...</span>
+              <span className="font-semibold text-slate-700 text-sm">Syncing...</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 rounded-b-2xl flex items-center justify-between text-xs text-slate-400">
-        <div className="flex items-center gap-4">
+      <div className="px-4 md:px-6 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[10px] md:text-xs text-slate-400 font-medium">
+        <div className="flex items-center gap-2 md:gap-4 truncate mr-2">
           <span>Words: {content.split(/\s+/).filter(x => x.length > 0).length}</span>
-          <span>Characters: {content.length}</span>
+          <span className="hidden sm:inline">Chars: {content.length}</span>
         </div>
-        <div>
-          Last edited: {new Date(item.date).toLocaleTimeString()}
+        <div className="shrink-0">
+          Last sync: {new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
       </div>
     </div>
