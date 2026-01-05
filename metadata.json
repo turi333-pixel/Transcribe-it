@@ -1,0 +1,7 @@
+{
+  "name": "VoxScribe AI",
+  "description": "A professional-grade audio transcription app that converts voice recordings and live speech into editable documents using Gemini AI.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
