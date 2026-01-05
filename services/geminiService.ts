@@ -1,9 +1,10 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 export const transcribeAudio = async (base64Data: string, mimeType: string): Promise<string> => {
+  // Creating a new instance right before the call ensures it uses the most up-to-date configuration
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
