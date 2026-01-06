@@ -3,7 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 
 export const transcribeAudio = async (base64Data: string, mimeType: string): Promise<string> => {
   // Creating a new instance right before the call ensures it uses the most up-to-date configuration
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  // Always use new GoogleGenAI({ apiKey: process.env.API_KEY }) as per guidelines
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   try {
     const response = await ai.models.generateContent({
@@ -17,25 +18,27 @@ export const transcribeAudio = async (base64Data: string, mimeType: string): Pro
             }
           },
           {
-            text: `Transcribe the provided audio with precise speaker diarization and timestamps. 
+            text: `Please process this audio and provide a professional document with the following structure:
 
-Follow these specific formatting rules:
-1. TIMESTAMPS: Include a timestamp marker in the format '[MM:SS]' at the beginning of every speaker turn and at the start of new paragraphs if a speaker talks for a long duration.
-2. DIARIZATION: Detect different voices and assign a unique label to each speaker (e.g., '[00:00] Speaker 1:', '[00:15] Speaker 2:').
-3. NAMING: If a speaker identifies themselves or is addressed by name in the audio, use their actual name (e.g., '[01:02] Sarah:').
-4. STRUCTURE: Start a new line every time the speaker changes or when there is a significant pause/topic shift.
-5. ACCURACY: Provide a verbatim transcription. Maintain the natural flow of conversation.
-6. PARAGRAPHS: For long segments, use logical breaks and repeat the timestamp at the start of the new paragraph.
-7. OUTPUT: Return only the final transcribed text with labels and timestamps. Do not include any meta-commentary or introductory text.`
+1. SUMMARY: Provide a concise 2-3 sentence summary of the main topics discussed.
+2. TRANSCRIPT: Transcribe the audio with precise speaker diarization and timestamps. 
+   - Use '[MM:SS]' markers at the start of every speaker turn.
+   - Assign unique labels like 'Speaker 1:' or use real names if mentioned.
+   - Start a new line for every speaker change.
+3. ACTION ITEMS: List any tasks, decisions, or agreed-upon actions in a clear, bulleted format. 
+   - Specify who is responsible for each action if their name is identifiable from the context.
+
+Maintain high accuracy and a professional tone. Return ONLY the final structured text. Do not include introductory remarks or meta-commentary.`
           }
         ]
       },
       config: {
         temperature: 0.1,
-        systemInstruction: "You are an expert transcriptionist specializing in speaker diarization and time-coded transcripts. You accurately distinguish between voices and provide precise [MM:SS] timestamps for every segment of dialogue."
+        systemInstruction: "You are an elite executive assistant specializing in meeting transcription and synthesis. You transform audio recordings into structured professional documents featuring summaries, time-coded transcripts with speaker identification, and clear action item tracking."
       }
     });
 
+    // The text property is a getter, not a method.
     return response.text || "Transcription failed or returned no text.";
   } catch (error) {
     console.error("Gemini Transcription Error:", error);

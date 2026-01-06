@@ -95,6 +95,7 @@ const App: React.FC = () => {
         fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:z-0
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
+        {/* Fix: use activeItem?.id as activeId was not defined */}
         <Sidebar 
           items={history} 
           activeId={activeItem?.id} 
@@ -125,7 +126,7 @@ const App: React.FC = () => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span className="hidden sm:inline">Transcribing...</span>
+                <span className="hidden sm:inline">Processing...</span>
               </div>
             )}
           </div>
@@ -146,7 +147,7 @@ const App: React.FC = () => {
                   Convert Voice to Document
                 </h2>
                 <p className="text-sm md:text-lg text-slate-500 max-w-2xl mx-auto px-4">
-                  Upload recordings to generate high-quality transcriptions with <strong>timestamps</strong> and <strong>speaker detection</strong> powered by Gemini 3 Pro.
+                  Upload recordings to generate structured transcripts with <strong>Summaries</strong>, <strong>Timestamps</strong>, and <strong>Action Items</strong> powered by Gemini 3 Pro.
                 </p>
               </div>
 
@@ -197,7 +198,7 @@ const App: React.FC = () => {
               </div>
               <div className="text-center px-4">
                 <h3 className="text-lg md:text-xl font-semibold text-slate-800">Analyzing Conversation</h3>
-                <p className="text-sm md:text-base text-slate-500">Detecting speakers and adding timestamps...</p>
+                <p className="text-sm md:text-base text-slate-500">Generating summary and action items...</p>
               </div>
             </div>
           )}
